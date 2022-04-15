@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://yahya-10:bwnUBbWqDyOx51dL@test.5emli.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://yahya-10:bwnUBbWqDyOx51dL@test.5emli.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "jsonWebTokenSecret": "jsonwebtokensecretsentence"
 }
