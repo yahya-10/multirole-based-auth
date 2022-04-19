@@ -8,22 +8,24 @@ const jwtSecret = config.get("jsonWebTokenSecret");
 
 const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
-    const user = await User.findOne({ email }).select("-password");
+    // const { email, password, role } = req.body;
+    const user = await User.findOne({ email: req.body.email }).select(
+      "-password"
+    );
 
-    if (user) return res.status(409).json("This email already exists");
+    if (user) return res.json("This email already exists");
 
     const newUser = new User({
-      firstName,
-      lastName,
-      email,
-      password,
-      role,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role,
     });
 
     const salt = await bcrypt.genSalt(10);
 
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     newUser.password = hashedPassword;
 
@@ -39,6 +41,7 @@ const register = async (req, res) => {
       if (err) throw err;
       res.json({ token });
     });
+    // console.log(req.body.firstName);
   } catch (error) {
     console.error(error.message);
     return res.status(500).send("Server error");

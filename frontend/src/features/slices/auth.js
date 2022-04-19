@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import axios from 'axios'
 
 import authService from "../../services/auth.service";
 
@@ -6,10 +7,16 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 export const register = createAsyncThunk(
   "/register",
-  async ({ email, password, role }, thunkAPI) => {
+  async ({ firstName, lastName, email, password, role }) => {
     try {
-      const response = await authService.register(email, password, role);
-      return response.data;
+      const response = await authService.register(
+        firstName,
+        lastName,
+        email,
+        password,
+        role
+      );
+      return response;
     } catch (error) {
       console.error(error);
     }
@@ -29,18 +36,23 @@ export const login = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("/logout", async () => {
-  await authService.logout();
+  authService.logout();
 });
 
-const initialState = user
-  ? {
-      isLoggedIn: true,
-      user,
-    }
-  : {
-      isLoggedIn: false,
-      user: null,
-    };
+// const initialState = user
+//   ? {
+//       isLoggedIn: true,
+//       user,
+//     }
+//   : {
+//       isLoggedIn: false,
+//       user: null,
+//     };
+
+const initialState = {
+  isLoggedIn: false,
+  user: null,
+};
 
 const authSlice = createSlice({
   name: "auth",
@@ -55,7 +67,7 @@ const authSlice = createSlice({
       state.user = null;
     },
     [register.fulfilled]: (state) => {
-      state.isLoggedIn = false;
+      state.isLoggedIn = true;
     },
     [register.rejected]: (state) => {
       state.isLoggedIn = false;
